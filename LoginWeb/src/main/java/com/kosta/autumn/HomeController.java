@@ -1,4 +1,4 @@
-package com.kosta.hotsummer;
+package com.kosta.autumn;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -35,7 +35,7 @@ public class HomeController {
 		
 		return "home";
 	}
-
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home() {
 		return "index";

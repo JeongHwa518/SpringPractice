@@ -1,4 +1,4 @@
-package com.kosta.hotsummer;
+package com.kosta.autumn;
 
 import java.io.IOException;
 
@@ -11,7 +11,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
-// 클래스 필터로 적용 						 모든 요청에 필터 적용
+//클래스 필터로 적용 						 모든 요청에 필터 적용
 @WebFilter(urlPatterns = "/*")
 public class PerformanceFilter implements Filter {
 
@@ -43,5 +43,4 @@ public class PerformanceFilter implements Filter {
 		// 정리 작업
 		
 	}
-
 }
