@@ -32,15 +32,16 @@ public class PageResolver {
 		}
 	public void print() {
 		System.out.println("page = " + page);
-		System.out.println(showPrev ? "PREV" : "");
+		System.out.println(showPrev ? "PREV " : "");
 		
-		for(int i = beginPage; i < endPage; i++) {
+		for(int i = beginPage; i <= endPage; i++) {
 			System.out.println(i + " ");
 		}
-		System.out.println(showNext ? "NEXT" : "");
-		
+		System.out.println(showNext ? " NEXT" : "");
 	}
 
+	
+	
 	public int getTotalCnt() {
 		return totalCnt;
 	}
@@ -107,6 +108,13 @@ public class PageResolver {
 
 	public int getNAV_SIZE() {
 		return NAV_SIZE;
+	}
+
+	@Override
+	public String toString() {
+		return "PageResolver [totalCnt=" + totalCnt + ", pageSize=" + pageSize + ", NAV_SIZE=" + NAV_SIZE
+				+ ", totalPage=" + totalPage + ", page=" + page + ", beginPage=" + beginPage + ", endPage=" + endPage
+				+ ", showNext=" + showNext + ", showPrev=" + showPrev + "]";
 	}
 	
 	

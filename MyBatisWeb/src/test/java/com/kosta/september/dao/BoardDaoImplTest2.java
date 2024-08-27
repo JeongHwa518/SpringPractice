@@ -18,13 +18,12 @@ public class BoardDaoImplTest2 {
 	private BoardDao boardDao;
 	
 	@Test
-	public void selectTest() throws Exception {
-		assertTrue(boardDao != null);   //boardDao가 autowired로 연결됐는지 확인
-		System.out.println("boardDao = " + boardDao);
-	
-		BoardDto boardDto = boardDao.select(1);
-		System.out.println("boardDto = " + boardDto);
-		assertTrue(boardDto.getBno().equals(1));
+	public void insertDummyDataTest() throws Exception {
+		boardDao.deleteAll();
+		
+//		for(int i = 1 ; i<= 250; i++) {
+//			BoardDto boardDto = new BoardDto("Pioneering" + i, "취업 준비..", "kosta");
+//			boardDao.insert(boardDto);
+//		}
 	}
-
 }

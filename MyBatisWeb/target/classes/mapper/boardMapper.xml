@@ -15,6 +15,16 @@
  		where bno = #{bno}    <!-- #{} -> 값에 ? 집어넣었던 쿼리문과 동일한 의미 -->
  	</select>
  	
+ 	<select id="count" resultType="int">
+ 		SELECT count(*) FROM board
+ 	</select>
+ 	
+ 	<select id="selectPage" parameterType="map" resultType="BoardDto">
+ 		<include refid="selectFromBoard" />
+ 		order by reg_date desc, bno desc
+		LIMIT #{pageSize} OFFSET #{offset}
+ 	</select>
+ 	
  	<delete id="deleteAll">
  		delete from board
  	</delete>
@@ -31,13 +41,15 @@
  	<insert id="insert" parameterType="BoardDto">
  		INSERT INTO board 
  		(title, content, writer) 
- 		VALUES(#{title}, #{content}, #{writer});
+ 		VALUES(#{title}, #{content}, #{writer})
  	</insert>
  	
  	<update id="update" parameterType="BoardDto">  <!-- 값이 변경되는데, 어떤값으로 변경될지 정해지지 않았으므로 파라미터 타입은 BoardDto로 지정 -->
  		UPDATE board
 		SET title = #{title}, content = #{content}, up_date = now()
-		WHERE bno = #{bno} and writer = #{writer};
+		WHERE bno = #{bno} and writer = #{writer}
  	</update>
+ 	
+
  	
  </mapper>

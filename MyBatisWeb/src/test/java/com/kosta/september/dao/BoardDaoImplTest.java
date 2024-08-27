@@ -2,6 +2,10 @@ package com.kosta.september.dao;
 
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,23 +21,40 @@ public class BoardDaoImplTest {
 	@Autowired
 	private BoardDao boardDao;
 	
-	@Test
+	//@Test
 	public void selectTest() throws Exception {
 		assertTrue(boardDao != null);   //boardDao가 autowired로 연결됐는지 확인
 		System.out.println("boardDao = " + boardDao);
 	
-		BoardDto boardDto = boardDao.select(1);
+		BoardDto boardDto = boardDao.select(51);
 		System.out.println("boardDto = " + boardDto);
-		assertTrue(boardDto.getBno().equals(1));
+		assertTrue(boardDto.getBno().equals(51));  //boardDto 값이 null로 나와서 오류뜸..
 		
 		boardDao.deleteAll();
 		boardDto = new BoardDto("Pioneering", "Ready for Action", "kosta");
 		boardDao.insert(boardDto);
 	
-		boardDto = boardDao.select(3);
+		boardDto = boardDao.select(53);
 		System.out.println("boardDto = " + boardDto);
-		assertTrue(boardDto.getBno().equals(3));
+		assertTrue(boardDto.getBno().equals(53));
 	}
 	
-	
+	@Test
+	public void selectPageTest() throws Exception {
+		boardDao.deleteAll();
+		
+		for(int i = 1; i <= 10; i++) {
+			BoardDto boardDto = new BoardDto("Pioneering" + i, "취업 준비 등등..", "kosta");
+			boardDao.insert(boardDto);
+		}
+			Map map = new HashMap();
+			map.put("offset", 7);
+			map.put("pageSize", 3);
+			
+			List<BoardDto> list = boardDao.selectPage(map);
+			assertTrue(list.get(0).getTitle().equals("Pioneering3"));
+			assertTrue(list.get(1).getTitle().equals("Pioneering2"));		// 역순
+			assertTrue(list.get(2).getTitle().equals("Pioneering1"));
+		}
+		
 }

@@ -1,6 +1,7 @@
 package com.kosta.september.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
@@ -47,6 +48,23 @@ public class BoardDaoImpl implements BoardDao {
 	public int update(BoardDto boardDto) throws Exception {
 		return session.update(namespace + "update", boardDto);
 	}
+
+	@Override
+	public int count() throws Exception {
+		return session.selectOne(namespace + "count");
+	}
+
+	@Override
+	public List<BoardDto> selectPage(Map map) throws Exception {
+		return session.selectList(namespace + "selectPage", map);
+	}
+
+	@Override
+	public int increaseViewCnt(Integer bno) throws Exception {
+		
+		return session.update(namespace + "increaseViewCnt", bno);
+	}
+
 
 }
 
