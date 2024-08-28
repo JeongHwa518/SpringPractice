@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kosta.september.domain.BoardDto;
 import com.kosta.september.domain.PageResolver;
@@ -24,15 +26,46 @@ public class BoardController {
 	@Autowired
 	BoardService boardService;
 	
+	@GetMapping("/write")
+	public String write(Model m) {
+		m.addAttribute("mode", "new");		// board.jsp 읽기와 쓰기에 사용. 쓰기에 사용할때는 mode=new
+		return "board";
+	}	
+	
+	@PostMapping("/remove")		
+	public String remove(Integer bno, Integer page, Integer pageSize, RedirectAttributes rattr, HttpSession session) {  //RedirectAttributes -> 알림창 한번만 뜨게해줌
+		String writer = (String) session.getAttribute("id");
+		String msg = "DEL_OK";
+		
+		try {
+			if(boardService.remove(bno, writer) != 1)
+				throw new Exception("Delete failed.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			msg = "DEL_ERR";
+		}
+		rattr.addAttribute("page", page);
+		rattr.addAttribute("pageSize", pageSize);
+		//rattr.addAttribute("msg", msg);
+		rattr.addFlashAttribute("msg", msg);
+		
+		return "redirect:/board/list";
+	}
+	
 	@GetMapping("/read")
 	public String read(Integer bno, Integer page, Integer pageSize, Model m) {
 		
 		try {
 			BoardDto boardDto = boardService.read(bno);
-			// ...
+			//m.addAttribute("boardDto", boardDto);
+			m.addAttribute(boardDto);			//키값이 리턴타입과 똑같으면서 소문자로 쓴경우 키값 생략 가능
+			m.addAttribute("page", page);
+			m.addAttribute("pageSize", pageSize);
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			return "redirect:/board/list";
 		}
 		
 		return "board";

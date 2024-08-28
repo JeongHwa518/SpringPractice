@@ -32,5 +32,10 @@ public class BoardServiceImpl implements BoardService {
 		boardDao.increaseViewCnt(bno);
 		return boardDto;
 	}
+
+	@Override
+	public int remove(Integer bno, String writer) throws Exception {
+		return boardDao.delete(bno, writer);
+	}
 	
 }

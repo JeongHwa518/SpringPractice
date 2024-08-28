@@ -105,7 +105,9 @@
 	</div>
 	
 	<script type="text/javascript">
-		
+		let msg = "${msg}"
+		if(msg == "DEL_OK") alert("성공적으로 삭제되었습니다.")
+		if(msg == "DEL_ERR") alert("삭제되었거나 없는 게시물입니다.")
 	</script>
 	
 	<div style="text-align: center;">
@@ -113,7 +115,9 @@
 			<div class="search-container">
 				<form action="">
 				
-				</form>				
+				</form>		
+				<button  type="button" id="writeBtn" class="btn btn-write" onclick="location.href='<c:url value="/board/write" />' ">
+						<i class="fa fa-pencil-alt"></i>글쓰기</button>		
 			</div>
 			
 			<table>

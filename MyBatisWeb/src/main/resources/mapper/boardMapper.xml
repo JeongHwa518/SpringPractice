@@ -50,6 +50,12 @@
 		WHERE bno = #{bno} and writer = #{writer}
  	</update>
  	
+ 	<update id="increaseViewCnt" parameterType="int">
+ 		UPDATE board
+		SET view_cnt = view_cnt + 1
+		WHERE bno = #{bno}
+ 	</update>
+ 	
 
  	
  </mapper>
