@@ -94,7 +94,58 @@
 				form.attr("method", "post")
 				form.submit()
 			})
+			
+			$("#writeBtn").on("click", function() {
+				let form =$("#form");
+				form.attr("action", "<c:url value="/board/write" />")
+				form.attr("method", "post")
+				
+				if(formCheck())
+					form.submit()
+			})
+			
+			let formCheck = function() {
+				let form = document.getElementById('form')
+				if(form.title.value == "") {
+					alert("제목을 입력해 주세요.")
+					form.title.focus();
+					return false;
+				} 
+				if(form.content.value == "") {
+					alert("내용을 입력해 주세요.")
+					form.content.focus();
+					return false;
+				}
+				return true;
+			}
+			
+			$("#modifyBtn").on("click", function() {
+				let form =$("#form")
+				let isReadOnly = $("input[name=title]").attr('readonly')
+						
+				// 1. 읽기 상태면 수정상태로 변경
+				if(isReadOnly=='readonly') {
+					$(".writing-header").html('게시판 수정')
+					$("input[name=title]").attr('readonly', false)
+					$("textarea").attr('readonly', false)
+					$("#modifyBtn").html("<i class='fa fa-pencil-alt'></i>등록")
+					return;
+				}
+				
+				// 2. 수정 상태면 수정된 내용을 서버로 전송 
+				form.attr("action",  "<c:url value="/board/modify?page=${page}&pageSize=${pageSize}" />")
+				form.attr("method", "post")
+				
+				if(formCheck())
+					form.submit()
+			})
+			
 		})
+	</script>
+	<script type="text/javascript">
+		let msg = "${msg}"
+		if(msg == "WRT_ERR") alert("게시물 등록에 실패하였습니다. 다시 시도해 주세요.")
+		if(msg == "MOD_ERR") alert("게시물 수정에 실패하였습니다. 다시 시도해 주세요.")
 	</script>
 	
 	<div class="container">
@@ -102,9 +153,9 @@
 		<form action="" id="form" class="frm" method="post">
 			<input type="hidden" name="bno" value="${boardDto.bno }" />
 			<input type="text" name="title" value="${boardDto.title }" ${mode == "new" ? "" : "readonly='readonly' " } ><br> <!-- 새게시글이 아닐 경우, readonly 모드로 제목 변경 불가 -->
-		 	<textarea rows="20" cols="" name="content" ${mode == "new" ? "" : "readonly='readonly' " }>
+		 	<textarea rows="20" cols="" name="content" ${mode == "new" ? "" : "readonly='readonly' " }> 
 		 		${boardDto.content }
-		 	</textarea><br>
+		 	</textarea><br><!-- ==랑 eq랑 둘다 가능 -->
 		 	
 		 	<c:if test="${mode eq 'new' }">
 		 		<button type="button" id="writeBtn" class="btn btn-write"><i class="fa fa-pencil-alt" aria-hidden="true"></i>등록</button>

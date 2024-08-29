@@ -26,6 +26,51 @@ public class BoardController {
 	@Autowired
 	BoardService boardService;
 	
+	@PostMapping("/modify")
+	public String modify(BoardDto boardDto, Integer page, Integer pageSize, RedirectAttributes rattr, Model m, HttpSession session) {
+		String writer = (String)session.getAttribute("id");
+		boardDto.setWriter(writer);
+		
+		try {
+			if(boardService.modify(boardDto) != 1) {
+				throw new Exception("Modify Failed");
+				}
+				rattr.addAttribute("page", page);
+				rattr.addAttribute("pageSize", pageSize);
+				rattr.addFlashAttribute("msg", "MOD_OK");
+				return "redirect:/board/list";
+						
+		} catch(Exception e) {
+			e.printStackTrace();
+			m.addAttribute(boardDto);    		//키, 값 동일할 경우 키 생략 가능
+			m.addAttribute("page", page);
+			m.addAttribute("pageSize", pageSize);
+			m.addAttribute("msg", "MOD_ERR");
+			return "board";
+		}
+	}
+	
+	@PostMapping("/write")
+	public String write(BoardDto boardDto, RedirectAttributes rattr, Model m, HttpSession session) {
+		String writer = (String)session.getAttribute("id");
+		boardDto.setWriter(writer);
+			
+		try {
+			if(boardService.write(boardDto) != 1)   //1이 아닐경우, 문제발생한것임
+				throw new Exception("Write Failed");
+			
+			rattr.addFlashAttribute("msg", "WRT_OK");
+			return "redirect:/board/list";
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+			m.addAttribute("mode", "new"); 					// 글쓰기 모드
+			m.addAttribute("boardDto", boardDto);		// 등록하려던 내용을 보여줘야 함 (저장) 
+			m.addAttribute("msg", "WRT_ERR");
+			return "board";
+		}
+	}
+	
 	@GetMapping("/write")
 	public String write(Model m) {
 		m.addAttribute("mode", "new");		// board.jsp 읽기와 쓰기에 사용. 쓰기에 사용할때는 mode=new
