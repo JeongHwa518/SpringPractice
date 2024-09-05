@@ -4,13 +4,16 @@ import java.util.List;
 import java.util.Map;
 
 import com.kosta.september.domain.BoardDto;
+import com.kosta.september.domain.Searchitem;
 
 public interface BoardDao {
 	
 	BoardDto select(Integer bno) throws Exception;
 	List<BoardDto> selectPage(Map map) throws Exception;
+	List<BoardDto> searchSelectPage(Searchitem sc) throws Exception;
 	
 	int count() throws Exception;
+	int searchResultCnt(Searchitem sc) throws Exception;
 
 	int deleteAll() throws Exception;
 

@@ -11,12 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kosta.september.domain.BoardDto;
 import com.kosta.september.domain.PageResolver;
+import com.kosta.september.domain.Searchitem;
 import com.kosta.september.service.BoardService;
 
 @Controller
@@ -98,14 +100,14 @@ public class BoardController {
 	}
 	
 	@GetMapping("/read")
-	public String read(Integer bno, Integer page, Integer pageSize, Model m) {
+	public String read(Integer bno, Searchitem sc, Model m) {
 		
 		try {
 			BoardDto boardDto = boardService.read(bno);
 			//m.addAttribute("boardDto", boardDto);
 			m.addAttribute(boardDto);			//키값이 리턴타입과 똑같으면서 소문자로 쓴경우 키값 생략 가능
-			m.addAttribute("page", page);
-			m.addAttribute("pageSize", pageSize);
+//			m.addAttribute("page", page);
+//			m.addAttribute("pageSize", pageSize);
 			
 			
 		} catch (Exception e) {
@@ -117,32 +119,29 @@ public class BoardController {
 	}
 
 	@GetMapping("/list")
-	public String list(Integer page, Integer pageSize, Model m, HttpServletRequest request) {
-		
+	public String list(@ModelAttribute Searchitem sc, Model m, HttpServletRequest request) {	
+		//@ModelAttribute가 생략(안적어도 자동 추가됨 Searchitem의 4개의 파라미터를 추가한다는 뜻)
 		// 로그인 안했으면 로그인 화면으로 이동 
 		if(!loginCheck(request))
 			return "redirect:/login/login?toURL="+request.getRequestURL();
 		
 		 try {
 			 
-			 if(page==null) page = 1;
-			 if(pageSize == null) pageSize = 10;
+//			 if(page==null) page = 1;
+//			 if(pageSize == null) pageSize = 10;
 			 
-			int totalCnt = boardService.getCount();
+			int totalCnt = boardService.getSearchResultCount(sc);
 			m.addAttribute("totalCnt", totalCnt);
 			
-			PageResolver pageResolver = new PageResolver(totalCnt, page, pageSize);
+			PageResolver pageResolver = new PageResolver(totalCnt, sc);
 			m.addAttribute("pr", pageResolver);
 			
-			Map map = new HashMap();
-			map.put("offset", (page-1)*pageSize);
-			map.put("pageSize", pageSize);
+//			Map map = new HashMap();			// 파라미터로 키,값을 넣을 필요가 없음 (Searchitem에 다 포함돼있음)
+//			map.put("offset", (page-1)*pageSize);
+//			map.put("pageSize", pageSize);
 			 			 
-			List<BoardDto> list  = boardService.getPage(map);
+			List<BoardDto> list  = boardService.getSearchResultPage(sc);
 			m.addAttribute("list", list);
-			
-			m.addAttribute("page", page);
-			m.addAttribute("pageSize", pageSize);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

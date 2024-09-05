@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.kosta.september.dao.BoardDao;
 import com.kosta.september.domain.BoardDto;
+import com.kosta.september.domain.Searchitem;
 
 @Service		//빈 등록
 public class BoardServiceImpl implements BoardService {
@@ -48,6 +49,16 @@ public class BoardServiceImpl implements BoardService {
 	public int modify(BoardDto boardDto) throws Exception {
 		return boardDao.update(boardDto);
 		//throw new Exception();
+	}
+
+	@Override
+	public List<BoardDto> getSearchResultPage(Searchitem sc) throws Exception {
+		return boardDao.searchSelectPage(sc);
+	}
+
+	@Override
+	public int getSearchResultCount(Searchitem sc) throws Exception {
+		return boardDao.searchResultCnt(sc);
 	}
 	
 }

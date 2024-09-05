@@ -6,5 +6,6 @@
 <configuration>
 	<typeAliases>
 		<typeAlias alias="BoardDto"  type="com.kosta.september.domain.BoardDto" />
+		<typeAlias alias="Searchitem"  type="com.kosta.september.domain.Searchitem" />
 	</typeAliases>
 </configuration>
